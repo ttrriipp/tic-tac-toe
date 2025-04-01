@@ -11,13 +11,13 @@ body {
 .board {
     display: grid;
     grid: repeat(3, 1fr) / repeat(3, 1fr);
-    height: 600px;
-    width: 600px;
+    height: 300px;
+    width: 300px;
     border: 2px solid black;
 }
 
 .box {
     cursor: pointer;
-    font-size: 8em;
+    font-size: 3em;
     background-color: transparent;
 }

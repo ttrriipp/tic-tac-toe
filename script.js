@@ -75,5 +75,3 @@ function Gameplay(playerOneName = "Player One", playerTwoName = "Player Two") {
 
   return { getActivePlayer, playRound };
 }
-
-Gameplay();

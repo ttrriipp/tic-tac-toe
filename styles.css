@@ -1,4 +1,7 @@
 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: cursive, sans-serif;
 }
 
@@ -6,6 +9,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
+    justify-content: center;
+}
+
+.game-container {
+    text-align: center;
 }
 
 .board {
@@ -16,8 +25,61 @@ body {
     border: 2px solid black;
 }
 
+
 .box {
     cursor: pointer;
     font-size: 3em;
     background-color: transparent;
+}
+
+.intro-screen {
+    border: 2px solid black;
+    height: 100vh;
+    width: 100vw;
+    background-color: hsl(37, 100%, 47%);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-screen>form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    text-align: center;
+    gap: 10px;
+}
+
+form input {
+    border: 3px solid black;
+    background-color: transparent;
+    border-radius: 8px;
+    outline: none;
+}
+
+form input:hover {
+    rotate: 0.5deg;
+}
+
+form button {
+    padding: 5px;
+    border: 3px solid black;
+    border-radius: 8px;
+    background-color: transparent;
+    width: 100px;
+    cursor: pointer;
+    outline: none;
+}
+
+form button:hover {
+    rotate: -5deg;
+}
+
+button[data-mark='X'] {
+    color: blue;
+}
+
+button[data-mark='O'] {
+    color: red;
 }

@@ -47,11 +47,11 @@ function Gameplay(playerOneName = "Player One", playerTwoName = "Player Two") {
   const players = [
     {
       name: playerOneName,
-      mark: "O",
+      mark: "X",
     },
     {
       name: playerTwoName,
-      mark: "X",
+      mark: "O",
     },
   ];
 
@@ -168,6 +168,8 @@ function displayController() {
   const game = Gameplay();
   const boardDisplay = document.querySelector(".board");
 
+  const introScreen = () => {};
+
   const updateScreen = () => {
     boardDisplay.textContent = "";
 
@@ -189,6 +191,7 @@ function displayController() {
         newBox.dataset.row = x;
         newBox.dataset.column = y;
         newBox.textContent = box.getValue();
+        newBox.dataset.mark = box.getValue();
         boardDisplay.appendChild(newBox);
       });
     });

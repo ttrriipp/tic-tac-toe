@@ -179,7 +179,7 @@ function displayController() {
           <input type="text" id="player-two" />
         </div>
         <div>
-          <button type="button">Play!</button>
+          <button type="button">play!</button>
         </div>
       </form>
 `;
@@ -242,6 +242,12 @@ function displayController() {
     boardDisplay.addEventListener("click", clickHandler);
     updateScreen();
   };
+
+  const restartButton = document.querySelector("button.restart");
+  function restartGame() {
+    introScreen();
+  }
+  restartButton.addEventListener("click", restartGame);
   introScreen();
 }
 

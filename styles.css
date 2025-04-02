@@ -15,6 +15,22 @@ body {
 
 .game-container {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+button.restart {
+    width: 100px;
+    background-color: red;
+    margin-top: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    height: 30px;
+}
+
+button.restart:hover {
+    background-color: hsl(0, 100%, 40%);
 }
 
 .board {

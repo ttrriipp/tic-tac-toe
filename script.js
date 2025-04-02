@@ -165,49 +165,84 @@ function Gameplay(playerOneName = "Player One", playerTwoName = "Player Two") {
 }
 
 function displayController() {
-  const game = Gameplay();
-  const boardDisplay = document.querySelector(".board");
+  const introScreen = () => {
+    const body = document.querySelector("body");
+    const introContainer = document.createElement("div");
+    const introForm = `<form>
+        <h1>Welcome to the Tic-Tac-Toe Game!</h1>
+        <div>
+          <label for="player-one">Player One Name:</label>
+          <input type="text" id="player-one" />
+        </div>
+        <div>
+          <label for="player-two">Player Two Name:</label>
+          <input type="text" id="player-two" />
+        </div>
+        <div>
+          <button type="button">Play!</button>
+        </div>
+      </form>
+`;
+    introContainer.className = "intro-screen";
+    introContainer.innerHTML = introForm;
+    body.appendChild(introContainer);
 
-  const introScreen = () => {};
+    const playerOneName = introContainer.querySelector("#player-one");
+    const playerTwoName = introContainer.querySelector("#player-two");
+    const playButton = introContainer.querySelector("button");
 
-  const updateScreen = () => {
-    boardDisplay.textContent = "";
-
-    const turnText = document.querySelector(".turn");
-    const activePlayer = game.getActivePlayer();
-    if (game.isGameOver() && game.getWinner()) {
-      turnText.textContent = `${game.getWinner()} wins!`;
-    } else if (game.isGameOver()) {
-      turnText.textContent = `It's a tie!`;
-    } else turnText.textContent = `${activePlayer.name}'s turn`;
-
-    const board = game.getBoard();
-
-    //display board
-    board.forEach((rows, x) => {
-      rows.forEach((box, y) => {
-        const newBox = document.createElement("button");
-        newBox.classList.add("box");
-        newBox.dataset.row = x;
-        newBox.dataset.column = y;
-        newBox.textContent = box.getValue();
-        newBox.dataset.mark = box.getValue();
-        boardDisplay.appendChild(newBox);
-      });
-    });
+    function proceedGame() {
+      if (playerOneName.value != "" && playerTwoName.value != "") {
+        introContainer.remove();
+        startGame(playerOneName.value, playerTwoName.value);
+      }
+    }
+    playButton.addEventListener("click", proceedGame);
   };
 
-  function clickHandler(e) {
-    const row = e.target.dataset.row;
-    const column = e.target.dataset.column;
-    if (!row && !column) return;
+  const startGame = (one, two) => {
+    const game = Gameplay(one, two);
+    const boardDisplay = document.querySelector(".board");
 
-    game.playRound(row, column);
+    const updateScreen = () => {
+      boardDisplay.textContent = "";
+
+      const turnText = document.querySelector(".turn");
+      const activePlayer = game.getActivePlayer();
+      if (game.isGameOver() && game.getWinner()) {
+        turnText.textContent = `${game.getWinner()} wins!`;
+      } else if (game.isGameOver()) {
+        turnText.textContent = `It's a tie!`;
+      } else turnText.textContent = `${activePlayer.name}'s turn`;
+
+      const board = game.getBoard();
+
+      //display board
+      board.forEach((rows, x) => {
+        rows.forEach((box, y) => {
+          const newBox = document.createElement("button");
+          newBox.classList.add("box");
+          newBox.dataset.row = x;
+          newBox.dataset.column = y;
+          newBox.textContent = box.getValue();
+          newBox.dataset.mark = box.getValue();
+          boardDisplay.appendChild(newBox);
+        });
+      });
+    };
+
+    function clickHandler(e) {
+      const row = e.target.dataset.row;
+      const column = e.target.dataset.column;
+      if (!row && !column) return;
+
+      game.playRound(row, column);
+      updateScreen();
+    }
+    boardDisplay.addEventListener("click", clickHandler);
     updateScreen();
-  }
-  boardDisplay.addEventListener("click", clickHandler);
-
-  updateScreen();
+  };
+  introScreen();
 }
 
 displayController();

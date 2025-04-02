@@ -13,6 +13,9 @@ function GameBoard() {
 
   const getBoard = () => board;
 
+  const getRows = () => rows;
+  const getColumns = () => columns;
+
   const addMark = (x, y, player) => {
     board[x][y].mark(player);
   };
@@ -24,11 +27,11 @@ function GameBoard() {
     console.log(boardWithValues);
   };
 
-  return { getBoard, addMark, printBoard };
+  return { getBoard, addMark, printBoard, getRows, getColumns };
 }
 
 function Box() {
-  let value;
+  let value = "";
 
   const mark = (player) => {
     value = player;
@@ -65,16 +68,100 @@ function Gameplay(playerOneName = "Player One", playerTwoName = "Player Two") {
     console.log(`${getActivePlayer().name}'s turn`);
   };
 
+  let gameOver = false;
+  const isGameOver = () => gameOver;
+  let winner;
+  const getWinner = () => winner;
+  const checkWinner = () => {
+    const rows = board.getRows();
+    const columns = board.getColumns();
+    const boardGrid = board.getBoard();
+
+    //horizontal check
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns - 2; j++) {
+        if (
+          boardGrid[i][j].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i][j + 1].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i][j + 2].getValue()
+        ) {
+          winner = activePlayer.name;
+          gameOver = true;
+          return;
+        }
+      }
+    }
+
+    //vertical check
+    for (let j = 0; j < columns; j++) {
+      for (let i = 0; i < rows - 2; i++) {
+        if (
+          boardGrid[i][j].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i + 1][j].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i + 2][j].getValue()
+        ) {
+          winner = activePlayer.name;
+          gameOver = true;
+          return;
+        }
+      }
+    }
+
+    //diagonal check
+    for (let i = 0; i < rows - 2; i++) {
+      for (let j = 0; j < columns - 2; j++) {
+        if (
+          boardGrid[i][j].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i + 1][j + 1].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i + 2][j + 2].getValue()
+        ) {
+          winner = activePlayer.name;
+          gameOver = true;
+          return;
+        }
+      }
+    }
+
+    //anti diagonal check
+    for (let i = 0; i < rows - 2; i++) {
+      for (let j = 2; j < columns; j++) {
+        if (
+          boardGrid[i][j].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i + 1][j - 1].getValue() &&
+          boardGrid[i][j].getValue() === boardGrid[i + 2][j - 2].getValue()
+        ) {
+          winner = activePlayer.name;
+          gameOver = true;
+          return;
+        }
+      }
+    }
+
+    const allBoxHaveValues = boardGrid.every((row) =>
+      row.every((box) => box.getValue() != "")
+    );
+    if (allBoxHaveValues) gameOver = true;
+  };
+
   const playRound = (x, y) => {
-    if (!board.getBoard()[x][y].getValue()) {
+    const boxValue = board.getBoard()[x][y].getValue();
+    if (!boxValue && !gameOver) {
       board.addMark(x, y, getActivePlayer().mark);
+      //check winner
+      checkWinner();
       switchPlayerTurn();
       newRound();
     }
   };
   newRound();
 
-  return { getActivePlayer, playRound, getBoard: board.getBoard };
+  return {
+    getActivePlayer,
+    playRound,
+    getBoard: board.getBoard,
+    isGameOver,
+    getWinner,
+  };
 }
 
 function displayController() {
@@ -86,7 +173,11 @@ function displayController() {
 
     const turnText = document.querySelector(".turn");
     const activePlayer = game.getActivePlayer();
-    turnText.textContent = `${activePlayer.name}'s turn`;
+    if (game.isGameOver() && game.getWinner()) {
+      turnText.textContent = `${game.getWinner()} wins!`;
+    } else if (game.isGameOver()) {
+      turnText.textContent = `It's a tie!`;
+    } else turnText.textContent = `${activePlayer.name}'s turn`;
 
     const board = game.getBoard();
 
